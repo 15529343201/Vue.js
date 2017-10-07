@@ -125,6 +125,44 @@
     </div>
 </script>
 ```
+## 2.1.2 数据
+&emsp;&emsp;Vue.js实例中可以通过data属性定义数据，这些数据可以在实例对应的模板中进行绑定并使用。需要注意的是，如果传入data的是一个对象，Vue实例会代理起data对象里的所有属性，而不会传入对象进行深拷贝。另外，我们也可以用Vue实例vm中的$data来获取声明的数据，例如：<br/>
+```html
+var data={a:1}
+var vm=new Vue({
+    data:data
+});
+vm.$data===data//->true
+vm.a===data.a//->true
+//设置属性也会影响原始数据
+vm.a=2
+data.a// ->2
+//反之亦然
+data.a=3
+vm.a // ->3
+```
+&emsp;&emsp;然后在模板中使用{{a}}就会输出vm.a的值，并且修改vm.a的值，模板中的值会随之改变，我们也称这个数据为响应式(responsive)数据。<br/>
+&emsp;&emsp;需要注意的是，只有初始化时传入的对象才是响应式的，即在声明完实例后，再加上一句``vm.$data.b='2'``,并在模板中使用{{b}},这时是不会输出字符串'2'的，例如:<br/>
+```html
+<div id="app">
+    <h1>{{a}}</h1>
+    <h1>{{b}}</h1>
+</div>
+<script type="text/javascript">
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            a:1
+        }
+    });
+    vm.$data.b=2;
+</script>
+```
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.3.PNG)
+&emsp;&emsp;如果需要在实例化之后加入响应式变量，需要调用实例方法$set,例如：<br/>
+```vm.$set('b',2);```
+&emsp;&emsp;不过Vue.js并不推荐这么做，这样会抛出一个异常：<br/>
+
 
 
 
