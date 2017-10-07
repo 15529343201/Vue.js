@@ -1,4 +1,4 @@
-#第一章 Vue.js简介
+# 第一章 Vue.js简介
 ## 1.1 Vue.js是什么
 &emsp;&emsp;单独来讲，Vue.js被定义成一个用来开发Web界面的前端库，是个非常轻量级的工具。Vue.js本身具有响应式和组件化的特定。<br/>
 &emsp;&emsp;所谓响应式编程，即为保持状态和视图的同步，这个在大多数前端MV*(MVC/MVVM/MVW)框架，不管是早期的backbone.js还是现在的AngularJS都对这一特性进行了实现(也称之为数据绑定),但这几者的实现方式和使用方式都不相同。相比而言，Vue.js使用起来更为简单，也无需引入太多新的概念，声明实例new Vue({ data:data })后自然对data里面的数据进行了视图上的绑定。修改data数据，视图中对应数据也会随之更改。<br/>
@@ -72,6 +72,36 @@
 &emsp;&emsp;我们在浏览器里最终看到的HTML结果为：<br/>
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/1.3.2.PNG)
 &emsp;&emsp;可以看到自定义的标签<message>被替换成了``<h1>Hello World</h1>``,当然，实际中的组件远比示例复杂，我们会给组件添加参数及方法，使之能更好地被复用。<br/>
+# 第二章 基础特性
+## 2.1 实例及选项
+&emsp;&emsp;从以前的例子中可以看出，Vue.js的使用都是通过构造函数Vue{{option}}创建一个Vue的实例：var vm=new Vue({})。一个Vue实例相当于一个MVVM模式中的ViewModel。如图2-1所示。<br/>
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.1.PNG)
+>图2-1
+                
+&emsp;&emsp;在实例化的时候，我们可以传入一个选项对象，包含数据、模板、挂载元素、方法、生命周期钩子等选项。下面就对一些常用的选项对象属性进行具体的说明。<br/>
+### 2.1.1 模板
+&emsp;&emsp;选项中主要影响模板或DOM的选项有el和template，属性replace和template需要一起使用。<br/>
+&emsp;&emsp;el:类型为字符串，DOM元素或函数。其作用是为实例提供挂载元素。一般来说我们会使用css选择符，或者原生的DOM元素。例如``el:'#app'``。在初始项中指定了el，实例将立即进入编译过程。<br/>
+&emsp;&emsp;template:类型为字符串。默认会将template值替换挂载元素(即el值对应的元素)，并合并挂载元素和模板根节点的属性(如果属性具有唯一性，类似id，则以模板根节点为准)。如果replace为false，模板template的值将插入挂载元素内。通过template插入模板的时候，挂载元素的内容都将被互联，除非使用slot进行分发。在使用template时，我们往往不会把所有的HTML字符串直接写在js里面，这样影响可读性而且也不利于维护。所以经常用``'#tpl'``的方式赋值，并且在body内容添加``<scrip id="tpl" type="x-template">``为标签包含的HTML内容，这样就能将HTML从js中分离开来，示例如下：<br/>
+```html
+<div id="app">
+    <p>123</p>
+</div>
+<script id="tpl" type="x-template">
+    <div class="tpl">
+        <p>This is a tpl from script tag</p>
+    </div>
+</script>
+<script type="text/javascript">
+    var vm=new Vue({
+        el:'#app',
+        template:'#tpl'
+    });
+</script>
+```
+最终输出HTML结构为:<br/>
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.2.PNG)
+
 
 
 
