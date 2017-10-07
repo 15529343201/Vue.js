@@ -12,9 +12,9 @@
 ## 1.3 Vue.js的Hello world
 &emsp;&emsp;现在来看一下我们第一个Vue.js项目，按照传统，我们来写一个Hello World。<br/>
 &emsp;&emsp;首先，引入Vue.js的方式有很多，你可以直接使用CDN，例如：<br/>
-&emsp;&emsp;`<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>`<br/>
+&emsp;&emsp;<code><script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script></code><br/>
 &emsp;&emsp;也可以通过NPM进行安装：<br/>
-&emsp;&emsp;`npm install vue`//最新稳定版本<br/>
+&emsp;&emsp;<code>npm install vue</code>//最新稳定版本<br/>
 &emsp;&emsp;正确引入Vue.js之后，我们在HTML文件中的内容为：<br/>
 ```html
 <!DOCTYPE html>
