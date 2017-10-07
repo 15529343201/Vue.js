@@ -101,6 +101,30 @@
 ```
 最终输出HTML结构为:<br/>
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.2.PNG)
+&emsp;&emsp;Vue.js 2.0中废除了replace这个参数，并且强制要求每一个Vue.js实例需要有一个根元素，即不允许组件模板为：<br/>
+```html
+<script id="tpl" type="x-template">
+    <div class="tpl">
+        ...
+    </div>
+    <div class="tpl">
+        ...
+    </div>
+</script>
+```
+&emsp;&emsp;这样的兄弟节点为根节点的模板形式，需要改写成：<br/>
+```html
+<script id="tpl" type="x-template">
+    <div class="wrapper">
+        <div class="tpl">
+            ...
+        </div>
+        <div class="tpl">
+            ...
+        </div>
+    </div>
+</script>
+```
 
 
 
