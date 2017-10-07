@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue.js的Hello world</title>
+    <script src="../js/vue.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="app">
+    <message content='Hello World'></message>
+</div>
+<script type="text/javascript">
+    var Message=Vue.extend({
+        props:['content'],
+        template:'<h1>{{content}}</h1>'
+    });
+    Vue.component('message',Message);
+    var vm=new Vue({
+        el:'#app',
+    });
+</script>
+</body>
+</html>

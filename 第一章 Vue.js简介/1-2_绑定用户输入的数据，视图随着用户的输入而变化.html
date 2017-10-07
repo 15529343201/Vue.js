@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue.js的Hello world</title>
+    <script src="../js/vue.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="app">
+    <h1>Your input is {{message}}</h1>
+    <input type="text" v-model="message">
+</div>
+<script type="text/javascript">
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            message:'Hello world,I am Vue.js'
+        }
+    });
+</script>
+</body>
+</html>
