@@ -12,9 +12,9 @@
 ## 1.3 Vue.js的Hello world
 &emsp;&emsp;现在来看一下我们第一个Vue.js项目，按照传统，我们来写一个Hello World。<br/>
 &emsp;&emsp;首先，引入Vue.js的方式有很多，你可以直接使用CDN，例如：<br/>
-&emsp;&emsp;<code><script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script></code><br/>
+&emsp;&emsp;`<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>`<br/>
 &emsp;&emsp;也可以通过NPM进行安装：<br/>
-&emsp;&emsp;<code>npm install vue</code>//最新稳定版本<br/>
+&emsp;&emsp;`npm install vue`//最新稳定版本<br/>
 &emsp;&emsp;正确引入Vue.js之后，我们在HTML文件中的内容为：<br/>
 ```html
 <!DOCTYPE html>
@@ -41,6 +41,40 @@
 ```
 &emsp;&emsp;输出结果为：
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/1.3.PNG)
+&emsp;&emsp;这种形式类似于前端模板引擎，我们把js中message值替换了HTML模板中{{message}}这部分。<br/>
+&emsp;&emsp;不过，如果仅仅是这样的例子，我相信你也不会有什么兴趣去使用Vue.js。根据上文对Vue.js的说明，我们继续写两个有关于它特性的例子。<br/>
+&emsp;&emsp;第一个特性是数据绑定，我们可以在运行上述例子的浏览器控制台(console)环境中输入vm.message='Hello Vue.js',输出结果就变为了Hello Vue.js。也就说明vm.message和视图中的{{message}}是绑定的，我们无需手动去获取``<h1>``标签来修改里面的innerHTML。<br/>
+&emsp;&emsp;同样,我们也可以绑定用户输入的数据，视图会随着用户的输入而变化，例如：<br/>
+```html
+<div id="app">
+    <h1>Your input is {{message}}</h1>
+    <input type="text" v-model="message">
+</div>
+```
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/1.3.1.PNG)
+&emsp;&emsp;vm.message的值会随着用户在input中输入的值的变化而变化，而无需我们手动去获取DOM元素的值再同步到js中。<br/>
+&emsp;&emsp;第二个特性是组件化，简单来说我们可以自己定义HTML标签，并在模板中使用它，例如：<br/>
+```html
+<div id="app">
+    <message content='Hello World'></message>
+</div>
+<script type="text/javascript">
+    var Message=Vue.extend({
+        props:['content'],
+        template:'<h1>{{content}}</h1>'
+    });
+    Vue.component('message',Message);
+    var vm=new Vue({
+        el:'#app',
+    });
+</script>
+```
+&emsp;&emsp;我们在浏览器里最终看到的HTML结果为：<br/>
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/1.3.2.PNG)
+&emsp;&emsp;可以看到自定义的标签<message>被替换成了``<h1>Hello World</h1>``,当然，实际中的组件远比示例复杂，我们会给组件添加参数及方法，使之能更好地被复用。<br/>
+
+
+
 
 
 
