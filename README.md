@@ -125,7 +125,7 @@
     </div>
 </script>
 ```
-## 2.1.2 数据
+### 2.1.2 数据
 &emsp;&emsp;Vue.js实例中可以通过data属性定义数据，这些数据可以在实例对应的模板中进行绑定并使用。需要注意的是，如果传入data的是一个对象，Vue实例会代理起data对象里的所有属性，而不会传入对象进行深拷贝。另外，我们也可以用Vue实例vm中的$data来获取声明的数据，例如：<br/>
 ```html
 var data={a:1}
@@ -202,7 +202,7 @@ vm.a // ->3
     })
 </script>
 ```
-## 2.1.3 方法
+### 2.1.3 方法
 &emsp;&emsp;我们可以通过选项属性methods对象来定义方法，并且通过v-on指令来监听DOM事件，例如：<br/>
 ```html
 <button v-on:click="alert"/>alert</button>
@@ -234,7 +234,7 @@ var vm=new Vue({
 ```
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.6.PNG)
 &emsp;&emsp;而Vue.js 2.0中废除了events选项属性，不再支持事件广播的这类特性，推荐直接使用Vue实例的全局方法$on()/$emit(),或者使用插件Vuex来处理。<br/>
-## 2.1.4 生命周期
+### 2.1.4 生命周期
 &emsp;&emsp;Vue.js实例在创建时有一系列的初始化步骤，例如建立数据观察，编译模板，创建数据绑定等。在此过程中，我们可以通过一些定义好的生命周期钩子函数来运行业务逻辑。例如：
 <br/>
 ```javascript
