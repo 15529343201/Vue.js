@@ -332,6 +332,10 @@ var vm=new Vue({
 <span>Hello {{* name }}</span>//->Hello Vue
 ```
 &emsp;&emsp;Vue.js2.0去除了{{*}}这种写法，采用v-once代替。以上模板需要改写为`<span v-once="name">{{name}}</span>`
+#### 2.HTML属性
+&emsp;&emsp;Mustache标签也同样适用于HTML属性中，例如：<br/>
+`<did id="id-{{id}}"></div>  //<div id="id-1"></div>`
+&emsp;&emsp;Vue.js2.0中废除了这种写法，用v-bind指令代替，`<div v-bind:id="'id-'+id"/></div>代替，或简写为`<div :id="'id-'+id"></div>`
 
 
 
