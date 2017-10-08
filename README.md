@@ -376,10 +376,12 @@ var vm=new Vue({
 * json参数为{Number}[indent]空格缩进数，与JSON.stringify()作用相同，将json对象数据输出成符合json格式的字符串。
 * debounce传入值必须是函数，参数可选，为{Number}[wait],即延时时长。作用是当调用函数n毫秒后，才会执行该动作，若在这n毫秒内有调用此动作则将重新计算执行时间。例如：
 ```javascript
-<input v-on:keyup="onKeyup | debounce 500"> ```//input元素上监听了keyup事件，并且延迟了500ms触发
+<input v-on:keyup="onKeyup | debounce 500"> //input元素上监听了keyup事件，并且延迟了500ms触发
+```
 * limitBy 传入值必须是数组，参数为{Number}limit,{Number}[offset],limit为显示个数，offset为开始显示数组下标。例如：
 ```javascript
-<div v-for="item in items | limitBy 10"></div> ```//items为数组，且只显示数组中的前十个元素
+<div v-for="item in items | limitBy 10"></div> //items为数组，且只显示数组中的前十个元素
+```
 * filterBy传入值必须是数组，参数为{String | Function} targetStringOrFunction,即需要匹配的字符串或函数(通过函数返回值为true或false来判断匹配结果);"in"(可选分隔符);{String}[...searchKeys],为检索的属性区域。示例：
 ```javascript
  <p v-for="item in items | filterBy '1.0' in 'name'">{{item | json}}</p> //检索items数组中属性name值为1.0的元素输出。检索区域也可以为数组，即in [name,version],在多个属性中进行检索
