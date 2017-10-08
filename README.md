@@ -202,7 +202,38 @@ vm.a // ->3
     })
 </script>
 ```
-
+## 2.1.3 方法
+&emsp;&emsp;我们可以通过选项属性methods对象来定义方法，并且通过v-on指令来监听DOM事件，例如：<br/>
+```html
+<button v-on:click="alert"/>alert</button>
+<script type="text/javascript">
+    new Vue({
+        el:'#app',
+        data:{a:1},
+        methods:{
+            alert:function () {
+                alert(this.a);
+            }
+        }
+    });
+</script>
+```
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.5.PNG)
+&emsp;&emsp;另外，Vue.js也支持自定义事件，可以在初始化时传入events对象，通过实例的$emit方法进行触发。这套通信机制常用在组件间相互通信的情况中，例如子组件冒泡触发父组件事件方法，或者父组件广播某个事件，子组件对其进行监听等。<br/>
+```javascript
+var vm=new Vue({
+        el:'#app',
+        data:data,
+        events:{
+            'event.alert':function () {
+                alert('this is event alert:'+this.a);
+            }
+        }
+    });
+    vm.$emit('event.alert');
+```
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.6.PNG)
+&emsp;&emsp;而Vue.js 2.0中废除了events选项属性，不再支持事件广播的这类特性，推荐直接使用Vue实例的全局方法$on()/$emit(),或者使用插件Vuex来处理。<br/>
 
 
 
