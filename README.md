@@ -336,6 +336,76 @@ var vm=new Vue({
 &emsp;&emsp;Mustache标签也同样适用于HTML属性中，例如：<br/>
 `<div id="id-{{id}}"></div>  //<div id="id-1"></div>`<br/>
 &emsp;&emsp;Vue.js2.0中废除了这种写法，用v-bind指令代替，`<div v-bind:id="'id-'+id"/></div>`代替，或简写为`<div :id="'id-'+id"></div>`
+### 3.绑定表达式
+&emsp;&emsp;放在Mustache标签内的文本内容称为绑定表达式。除了直接输出属性值之外，一段绑定表达式可以由一个简单的JavaScript表达式和可选的一个或多个过滤器构成。例如：<br/>
+```javascript
+{{ index + 1 }} //1
+{{ index == 0 ? 'a':'b' }} //a
+{{ name.split('').join('|') }} //V|u|e
+```
+&emsp;&emsp;每个绑定中只能包含单个表达式，并不支持JavaScript语句，否则Vue.js就会抛出warning异常。并且绑定表达式里不支持正则表达式，如果需要进行复杂的转换，可以使用过滤器或者计算属性来进行处理，以下的例子即为无效的表达式:<br/>
+```javascript
+{{ var a = 1 }} //无效
+{{ if(ok) { return name } }} //无效，但可以写成ok ? name : '' 或者 ok && name这样的写法
+```
+### 过滤器
+&emsp;&emsp;Vue.js允许在表达式后添加可选的过滤器，以管道符"|"指示。示例<br/>
+&emsp;&emsp;`{{ name | uppercase }} //VUE` <br/>
+&emsp;&emsp;Vue.js将name的值传入给uppercase这个内置的过滤器中(本质是一个函数),返回字符串的最大值。同时也允许多个过滤器链式使用，例如：<br/>
+&emsp;&emsp;`{{ name | filterA | filterB }}` <br/>
+&emsp;&emsp;也允许传入多个参数，例如：<br/>
+&emsp;&emsp;`{{ name | filterA arg1 arg2 }}` <br/>
+&emsp;&emsp;此时，filterA将name的值作为第一个参数，arg1,arg2作为第二，第三个参数传入过滤器函数中。最终函数的返回值即为输出结果。arg1,arg2可以使用表达式，也可以加上单引号，直接传入字符串。例如：<br/>
+&emsp;&emsp;`{{ name.split('') | limitBy 3 1 }} //->u,e` <br/>
+&emsp;&emsp;过滤器limitBy可以接受两个参数，第一个参数是设置显示个数，第二个参数为可选，指从开始元素的数组下标。<br/>
+&emsp;&emsp;Vue.js内置了10个过滤器，下面简单介绍它们的功能和用法。<br/>
+* capitalize:字符串字符转化为大写
+* uppercase:字符串转化成大写
+* lowercase:字符串转化为小写
+* currency 参数为{String}[货币符号]，{Number}[小数位]，将数字转化为货币符号，并且会自动添加数字分节号。例如：
+`{{ amount | currency '￥' 2 }}` // ->若amount值为10000,则输出￥10000.00
+* pluralize参数为{String}single,[double,triple],字符串复数化。如果接收的是一个参数，那复数形式就是在字符串末尾直接加一个"s"。如果接收多个参数，则会被当成数组处理，字符串会添加对应数组下标的值。如果字符串的个数多于参数个数，多出部分会都添加最后一个参数的值。例如：
+`<p  v-for="c in count"> {{ c | pluralize 'item' }} {{ c | pluralize 'st' 'nd' 'rd' 'th' }}</p>`
+&emsp;&emsp;输出结果:<br/>
+```html
+1item 1st
+2items 2nd
+3items 3rd
+4items 4th
+```
+* json参数为{Number}[indent]空格缩进数，与JSON.stringify()作用相同，将json对象数据输出成符合json格式的字符串。
+* debounce传入值必须是函数，参数可选，为{Number}[wait],即延时时长。作用是当调用函数n毫秒后，才会执行该动作，若在这n毫秒内有调用此动作则将重新计算执行时间。例如：
+```javascript
+<input v-on:keyup="onKeyup | debounce 500"> //input元素上监听了keyup事件，并且延迟了500ms触发```
+* limitBy 传入值必须是数组，参数为{Number}limit,{Number}[offset],limit为显示个数，offset为开始显示数组下标。例如：
+```javascript
+<div v-for="item in items | limitBy 10"></div> //items为数组，且只显示数组中的前十个元素```
+* filterBy传入值必须是数组，参数为{String | Function} targetStringOrFunction,即需要匹配的字符串或函数(通过函数返回值为true或false来判断匹配结果);"in"(可选分隔符);{String}[...searchKeys],为检索的属性区域。示例：
+```javascript
+ <p v-for="item in items | filterBy '1.0' in 'name'">{{item | json}}</p> //检索items数组中属性name值为1.0的元素输出。检索区域也可以为数组，即in [name,version],在多个属性中进行检索
+```
+上述两个例子的输出结果为:
+Vue1.0
+{"name":"Vue1.0","version":"1.0"}
+```javascript
+<p v-for="item in items | filterBy customFilter">{{item | json}}</p>//使用自定义的过滤函数，函数可以在选项methods中定义
+    methods:{
+        customFilter:function(item){
+            if(item.name) return true //检索所有元素中包含name属性的元素
+        }
+    }
+```
+* orderBy传入值必须是数组，参数为{String|Array|Function}sortKeys,即指定排序策略。这里可以使用单个键名，也可以传入包含多个排序键名的数组。也可以像Array.Sort()那样传入自己的排序策略函数。第二个参数为可选参数{Stirng}[order],即选择升序或降序，order>=0为升序，order<0为降序。
+```javascript
+单个键名：<p v-for="item in items | orderBy 'name' -1">{{item.name}}</p>//items数组中以键名name进行降序排列
+    多个键名：<p v-for="item in items | orderBy [name,version]">{{item.name}}</p> //使用items里的两个键名进行排序
+    自定义排序函数：<p v-for="item in items | orderBy customOrder">{{item.name}}</p>
+    methods:{
+        customOrder:function(a,b){
+            return parseFloat(a.version) > parseFloat(b.version) //对比item中version的值的大小进行排序
+        }
+    }
+```
 
 
 
