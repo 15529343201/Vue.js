@@ -301,6 +301,29 @@ var vm=new Vue({
 ```
 &emsp;&emsp;输出结果为:<br/>
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.8.PNG)
+## 2.2 数据绑定
+### 2.2.1 数据绑定语法
+&emsp;&emsp;本小节主要介绍Vue.js的数据绑定语法，出现的例子会基于以下js代码：<br/>
+```javascript
+var vm=new Vue({
+        el:'#app',
+        data:{
+            id:1,
+            index:0,
+            name:'Vue',
+            avatar:'http://......',
+            count:[1,2,3,4,5],
+            names:['Vue1.0','Vue2.0'],
+            items:[
+                {name:'Vue1.0',version:'1.0'},
+                {name:'Vue1.1',version:'1.0'}
+            ]
+        }
+    });
+```
+#### 1.文本插值
+&emsp;&emsp;数据绑定最基础的形式就是文本插值，使用的是双大括号{{}},为"Mustache"语法(源自前端模板引擎Mustache.js),示例如下：<br/>
+`<span>Hello {{name}}</span>`//->Hello Vue;
 
 
 
