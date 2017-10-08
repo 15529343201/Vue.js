@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据</title>
+    <script src="../js/vue.min.js" type="text/javascript"></script>
+</head>
+<body>
+<my-component title="myTitle" content="myContent"></my-component>
+<script type="text/javascript">
+    var myComponent=Vue.component('my-component', {
+        props: ['title', 'content'],
+        template: '<h1>{{title}}</h1><p>{{content}}</p>'
+    });
+</script>
+
+
+</body>
+</html>
