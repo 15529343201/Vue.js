@@ -323,8 +323,15 @@ var vm=new Vue({
 ```
 #### 1.文本插值
 &emsp;&emsp;数据绑定最基础的形式就是文本插值，使用的是双大括号{{}},为"Mustache"语法(源自前端模板引擎Mustache.js),示例如下：<br/>
-`<span>Hello {{name}}</span>`//->Hello Vue;
-
+```javascript
+<span>Hello {{name}}</span>//->Hello Vue;
+```
+&emsp;&emsp;Vue.js实例vm中的name属性的值将会替换Mustache标签中的name,并且修改数据对象中的name属性，DOM也会随之更新。在浏览器console中运行vm.name='Vue 1.0',输出结果为Hello Vue 1.0。<br/>
+&emsp;&emsp;模板语法同时也支持单次插值，即首次赋值后再更改vm实例属性值不会引起DOM变化，例如以下模板在运行vm.name='Vue 1.0'后，依旧输出Hello Vue:<br/>
+```javascript
+<span>Hello {{* name }}</span>//->Hello Vue
+```
+&emsp;&emsp;Vue.js2.0去除了{{*}}这种写法，采用v-once代替。以上模板需要改写为`<span v-once="name">{{name}}</span>`
 
 
 
