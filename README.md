@@ -413,10 +413,10 @@ Vue1.0
 * 参数<br/>
 `<img v-bind:src="avatar"/>`<br/>
 &emsp;&emsp;指令v-bind可以在后面带一个参数，用冒号(:)隔开，src即为参数。此时img标签中的src会与vm实例中的avatar绑定，等同于:<br/>
-`<img src="{{avatar}}" />
+`<img src="{{avatar}}" />`
 * 修饰符<br/>
 &emsp;&emsp;修饰符(Modifiers)是以半角句号.开始的特殊后缀，用于表示指令应该以特殊方式绑定。<br/>
-`<button v-on:click.stop="doClick"></button>`<br/>
+&emsp;&emsp;`<button v-on:click.stop="doClick"></button>`<br/>
 &emsp;&emsp;v-on的作用是在对应的DOM元素上绑定时间监听器，doClick为函数名，而stop即为修饰符，作用是停止冒泡，相当于调用了e.stopPropagation()。
 
 
