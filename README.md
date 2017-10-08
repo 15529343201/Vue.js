@@ -249,7 +249,7 @@ var vm=new Vue({
 ```
 &emsp;&emsp;运行上述例子时，浏览器console中就会打印出created。<br/>
 &emsp;&emsp;下图是实例的生命周期。<br/>
-![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.7.PNG)
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.7.PNG)<br/>
 &emsp;&emsp;init:在实例开始初始化时同步调用。此时已完成数据观测、事件等都尚未初始化。2.0中更名为beforeCreate。<br/>
 &emsp;&emsp;created:在实例创建之后调用。此时已完成数据绑定、事件方法，但尚未开始DOM编译，即未挂载到document中。<br/>
 &emsp;&emsp;beforeCompile:在DOM编译前调用。2.0废除了该方法，推荐使用created。<br/>
