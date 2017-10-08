@@ -234,7 +234,73 @@ var vm=new Vue({
 ```
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.6.PNG)
 &emsp;&emsp;而Vue.js 2.0中废除了events选项属性，不再支持事件广播的这类特性，推荐直接使用Vue实例的全局方法$on()/$emit(),或者使用插件Vuex来处理。<br/>
-
+## 2.1.4 生命周期
+&emsp;&emsp;Vue.js实例在创建时有一系列的初始化步骤，例如建立数据观察，编译模板，创建数据绑定等。在此过程中，我们可以通过一些定义好的生命周期钩子函数来运行业务逻辑。例如：
+<br/>
+```javascript
+var vm=new Vue({
+        data:{
+            a:1
+        },
+        created:function () {
+            console.log('created')
+        }
+    })
+```
+&emsp;&emsp;运行上述例子时，浏览器console中就会打印出created。<br/>
+&emsp;&emsp;下图是实例的生命周期。<br/>
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.7.PNG)
+&emsp;&emsp;init:在实例开始初始化时同步调用。此时已完成数据观测、事件等都尚未初始化。2.0中更名为beforeCreate。<br/>
+&emsp;&emsp;created:在实例创建之后调用。此时已完成数据绑定、事件方法，但尚未开始DOM编译，即未挂载到document中。<br/>
+&emsp;&emsp;beforeCompile:在DOM编译前调用。2.0废除了该方法，推荐使用created。<br/>
+&emsp;&emsp;beforeMount:2.0新增的声明钩子函数，在mounted之前运行。<br/>
+&emsp;&emsp;compiled:在编译结束时调用。此时所有指令已生效，数据变化已能触发DOM更新，但不保证$el已插入文档。2.0中更名为mounted。<br/>
+&emsp;&emsp;ready:在编译结束和$el第一次插入文档之后调用。2.0废弃了该方法，推荐使用mounted。这个变化其实已经改变了ready这个生命周期状态，相当于取消了在$el首次插入文档后的钩子函数。<br/>
+&emsp;&emsp;attached:在vm.$el插入DOM时调用，ready会在第一次attached后调用。操作$el必须使用指令或实例方法(例如$appendTo()),直接操作vm.$el不会触发这个钩子。2.0废弃了该方法，推荐在其他钩子函数中自定义方法检查是否已挂载。<br/>
+&emsp;&emsp;detached:同attached类似，该钩子在vm.$el从DOM删除时调用，而且必须是指令或实例方法。2.0中同样废弃了该方法。<br/>
+&emsp;&emsp;beforeDestroy:在开始销毁实例时调用，此刻实力仍然有效。<br/>
+&emsp;&emsp;destroyed:在实例被销毁之后调用。此时所有绑定和实例指令都已经解绑，子实例也被销毁。<br/>
+&emsp;&emsp;beforeUpdate:2.0新增的生命周期钩子，在实例挂载之后，再次更新实例(例如更新data)时会调用该方法，此时尚未更新DOM结构。<br/>
+&emsp;&emsp;updated:2.0新增的生命周期钩子，在实例挂载之后，再次更新实例并更新完DOM结构后调用。<br/>
+&emsp;&emsp;activated:2.0新增的生命周期钩子，需要配合动态组件keep-live属性使用。在动态组件初始化渲染的过程中调用该方法。<br/>
+&emsp;&emsp;deactivated:2.0新增的生命周期钩子，需要配合动态组件keep-live属性使用。在动态组件移出的过程中调用该方法。<br/>
+&emsp;&emsp;可以通过一个简单的demo来更清楚地了解内部的运行机制，代码如下：<br/>
+```javascript
+var vm=new Vue({
+        el:'#app',
+        init:function () {
+            console.log('init');
+        },
+        created:function () {
+            console.log('created');
+        },
+        beforeCompile:function () {
+            console.log('beforeCompile');
+        },
+        compiled:function () {
+            console.log('compiled');
+        },
+        attached:function () {
+            console.log('attached');
+        },
+        dettached:function () {
+            console.log('dettached');
+        },
+        beforeDestroy:function () {
+            console.log('beforeDestroy');
+        },
+        destroyed:function () {
+            console.log('destroyed');
+        },
+        ready:function () {
+            console.log('ready');
+            //组件完成后调用$destroy函数，进行销毁
+            this.$destroy();
+        }
+    });
+```
+&emsp;&emsp;输出结果为:<br/>
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.8.PNG)
 
 
 
