@@ -323,7 +323,7 @@ var vm=new Vue({
 ```
 #### 1.文本插值
 &emsp;&emsp;数据绑定最基础的形式就是文本插值，使用的是双大括号{{}},为"Mustache"语法(源自前端模板引擎Mustache.js),示例如下：<br/>
-<font color="#00FFFF"><span>Hello {{name}}</span></font>//->Hello Vue;
+<font color=#0099ff size=5 face="黑体">`<span>Hello {{name}}</span>`</font>
 
 
 
