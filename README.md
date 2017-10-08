@@ -336,7 +336,7 @@ var vm=new Vue({
 &emsp;&emsp;Mustache标签也同样适用于HTML属性中，例如：<br/>
 `<div id="id-{{id}}"></div>  //<div id="id-1"></div>`<br/>
 &emsp;&emsp;Vue.js2.0中废除了这种写法，用v-bind指令代替，`<div v-bind:id="'id-'+id"/></div>`代替，或简写为`<div :id="'id-'+id"></div>`
-### 3.绑定表达式
+#### 3.绑定表达式
 &emsp;&emsp;放在Mustache标签内的文本内容称为绑定表达式。除了直接输出属性值之外，一段绑定表达式可以由一个简单的JavaScript表达式和可选的一个或多个过滤器构成。例如：<br/>
 ```javascript
 {{ index + 1 }} //1
@@ -348,7 +348,7 @@ var vm=new Vue({
 {{ var a = 1 }} //无效
 {{ if(ok) { return name } }} //无效，但可以写成ok ? name : '' 或者 ok && name这样的写法
 ```
-### 过滤器
+#### 4.过滤器
 &emsp;&emsp;Vue.js允许在表达式后添加可选的过滤器，以管道符"|"指示。示例<br/>
 &emsp;&emsp;`{{ name | uppercase }} //VUE` <br/>
 &emsp;&emsp;Vue.js将name的值传入给uppercase这个内置的过滤器中(本质是一个函数),返回字符串的最大值。同时也允许多个过滤器链式使用，例如：<br/>
@@ -408,6 +408,16 @@ Vue1.0
         }
     }
 ```
+#### 5.指令
+&emsp;&emsp;Vue.js也提供指令(Directives)这一概念，可以理解为当表达式的值发生改变时，会有特殊行为作用到绑定的DOM上。指令通常会直接书写在模板的HTML元素中，而为了有别于普通的属性，Vue.js指令是带有前缀v-的属性。写法上来说，指令的限定为绑定表达式。<br/>
+* 参数
+`<img v-bind:src="avatar"/>`<br/>
+&emsp;&emsp;指令v-bind可以在后面带一个参数，用冒号(:)隔开，src即为参数。此时img标签中的src会与vm实例中的avatar绑定，等同于:<br/>
+* 修饰符
+&emsp;&emsp;修饰符(Modifiers)是以半角句号.开始的特殊后缀，用于表示指令应该以特殊方式绑定。<br/>
+`<button v-on:click.stop="doClick"></button>`
+&emsp;&emsp;v-on的作用是在对应的DOM元素上绑定时间监听器，doClick为函数名，而stop即为修饰符，作用是停止冒泡，相当于调用了e.stopPropagation()。
+
 
 
 
