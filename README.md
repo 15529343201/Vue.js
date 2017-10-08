@@ -160,8 +160,50 @@ vm.a // ->3
 ```
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.3.PNG)
 &emsp;&emsp;如果需要在实例化之后加入响应式变量，需要调用实例方法$set,例如：<br/>
-```vm.$set('b',2);```
-&emsp;&emsp;不过Vue.js并不推荐这么做，这样会抛出一个异常：<br/>
+``vm.$set('b',2);``<br/>
+```html
+<div id="app">
+    <h1>{{a}}</h1>
+    <h1>{{b}}</h1>
+</div>
+<script type="text/javascript">
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            a:1
+        }
+    });
+    vm.$set('b',2);
+</script>
+```
+&emsp;&emsp;不过Vue.js并不推荐这么做，这样会抛出一个异常(事实上，我并没有发现异常)：<br/>
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.4.PNG)
+&emsp;&emsp;所以，我们应尽量在初始化的时候，把所有的变量都设定好，如果没有值，也可以用undefined或null占位。<br/>
+&emsp;&emsp;另外，组件类型的实例可以通过props获取数据，同data一样，也需要在初始化时预设好。示例：<br/>
+```javascript
+<my-component title="myTitle" content="myContent"></my-component>
+    var myComponent=Vue.component('my-component', {
+        props: ['title', 'content'],
+        template: '<h1>{{title}}</h1><p>{{content}}</p>'
+    });
+```
+&emsp;&emsp;我们也可以在上述类型实例中同时使用data，但有两个地方需要注意：(1)data的值必须是一个函数，并且返回值是原始对象。如果传给组件的data是一个原始对象的话，则在建立多个组件实例时它们就会共用这个data对象，修改其中一个组件实例的数据就会影响到其他组件实例的数据，这显然不是我们所期望的。(2)data中的属性和props中的不能重名。这两者都会抛出异常。<br/>
+&emsp;&emsp;所以正确的使用方法如下：<br/>
+```javascript
+<script type="text/javascript">
+    var MyComponent=Vue.component('my-component',{
+        props:['title','content'],
+        data:function () {
+            return{
+                desc:'123'
+            }
+        },
+        template:'<div><h1>{{title}}</h1><p>{{content}}</p><p>{{desc}}</p></div>'
+    })
+</script>
+```
+
+
 
 
 
