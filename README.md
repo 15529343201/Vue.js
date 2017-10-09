@@ -418,6 +418,125 @@ Vue1.0
 &emsp;&emsp;修饰符(Modifiers)是以半角句号.开始的特殊后缀，用于表示指令应该以特殊方式绑定。<br/>
 &emsp;&emsp;`<button v-on:click.stop="doClick"></button>`<br/>
 &emsp;&emsp;v-on的作用是在对应的DOM元素上绑定时间监听器，doClick为函数名，而stop即为修饰符，作用是停止冒泡，相当于调用了e.stopPropagation()。
+### 2.2.2 计算属性
+&emsp;&emsp;在项目开发中,我们展示的数据往往需要经过一些处理。除了在模板中绑定表达式或者利用过滤器外,Vue.js还提供了计算属性这种方法,避免在模板中加入过重的业务逻辑,保证模板的结果清晰和可维护性。<br/>
+#### 1.基础例子
+```javascript
+<div id="app">
+    <p>{{firstName}}</p>//Gavin
+    <p>{{lastName}}</p>//CLY
+    <p>{{fullName}}</p>//Gavin CLY
+</div>
+<script type="text/javascript">
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            firstName:'Gavin',
+            lastName:'CLY'
+        },
+        computed:{
+            fullName:function () {
+                //this指向vm实例
+                return this.firstName+' '+this.lastName
+            }
+        }
+    });
+</script>
+```
+&emsp;&emsp;此时你对vm.firstName和vm.lastName修改，始终会影响vm.fullName。<br/>
+#### 2.Setter
+```javascript
+<script type="text/javascript">
+    var vm=new Vue({
+        el:'#el',
+        data:{
+            cents:100,
+        },
+        computed:{
+            price:{
+                set:function (newValue) {
+                    this.cents=newValue*100;
+                },
+                get:function () {
+                    return (this.cents/100).toFixed(2);
+                }
+            }
+        }
+    });
+</script>
+```
+&emsp;&emsp;在处理商品价格的时候，后端往往会把价钱定义成以分为单位的整型，避免在处理浮点类型数据时产生的问题。而前端则需要把价钱在转换成元进行展示，而且如果需要对价钱进行修改的话，则又要把输入的价格在恢复到分传给后端，很是繁琐。<br/>
+&emsp;&emsp;而在使用Vue.js的计算属性后，我们可以将vm.cents设置为后端所存的数据，计算属性price为前端展示和更新的数据。<br/>
+```<p>&yen;{{price}}</p> //￥1.00```<br/>
+&emsp;&emsp;此时更改vm.price=2,vm.cents会被更新为200，在传递给后端时无需再手动转化一遍数据。<br/>
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.9.PNG)
+### 2.2.3 表单控件
+&emsp;&emsp;Vue.js中提供v-model的指令对表单元素进行双向数据绑定，在修改表单元素值的同时，实例vm中对应的属性值也同时更新，反之亦然。本小节会介绍主要input元素绑定v-model后的具体用法和处理方式，示例所依赖的js代码如下:<br/>
+```javascript
+<script type="text/javascript">
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            message:'',
+            gender:'',
+            checked:'',
+            multiChecked:[],
+            selected:'',
+            multiSelected:[]
+        }
+    });
+</script>
+```
+#### 1.Text
+&emsp;&emsp;输入框提示，用户输入的内容和vm.message直接绑定。<br/>
+```javascript
+<div id="app">
+    <input type="text" v-model="message"/>
+    <span>Your input is:{{message}}</span>
+</div>
+```
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.10.PNG)<br/>
+#### 2.Radio
+```javascript
+<label><input type="radio" value="male" v-model="gender">男 </label>
+    <label><input type="radio" value="female" v-model="gender">女 </label>
+    <p>{{gender}}</p>
+```
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.11.PNG)<br/>
+#### 3.Checkbox
+&emsp;&emsp;单个勾选框，v-model即为布尔值，此时input的value并不影响v-model的值。<br/>
+```javascript
+ <input type="checkbox" v-model="checked"/>
+    <span>checked:{{checked}}</span>
+```
+&emsp;&emsp;多个勾选框，v-model使用相同的属性名称。切属性为数组。<br/>
+```javascript
+<label><input type="checkbox" value="1" v-model="multiChecked">1 </label>
+    <label><input type="checkbox" value="2" v-model="multiChecked">2 </label>
+    <label><input type="checkbox" value="3" v-model="multiChecked">3 </label>
+    <p>MultiChecked:{{multiChecked.join('|')}}</p>
+```
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.12.PNG)<br/>
+#### 4.Select
+```javascript
+ <select v-model="selected">
+        <option selected>A</option>
+        <option>B</option>
+        <option>C</option>
+    </select>
+
+    <span>Selected:{{selected}}</span>
+    <select v-model="multiSelected" multiple>
+        <option selected>A</option>
+        <option>B</option>
+        <option>C</option>
+    </select>
+    <span>MultiSelected:{{multiSelected.join('|')}}</span>
+```
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.13.PNG)<br/>
+#### 5.绑定value
+&emsp;&emsp;表单控件的值同样可以绑定在Vue实例的动态属性上，用v-bind实现。示例:<br/>
+1.Checkbox
 
 
 
