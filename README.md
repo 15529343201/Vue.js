@@ -541,12 +541,12 @@ Vue1.0
 <input type="checkbox" v-model="checked" v-bind:true-value="a" v-bind:false-value="b">
 ```
 选中:vm.checked==vm.a //->true
-未选中:vm.checked==vm.b //->true
+未选中:vm.checked==vm.b //->true<br/>
 2.Radio
 ```javascript
 <input type="radio" v-model="checked",v-bind:value="a">
 ```
-选中:vm.checked==vm.a //->true
+选中:vm.checked==vm.a //->true <br/>
 3.Select Options
 ```javascript
 <select v-model="selected">
