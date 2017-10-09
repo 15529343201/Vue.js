@@ -556,6 +556,32 @@ Vue1.0
 ```
 选中:typeof vm.selected// -> 'object'
 vm.selected.number // ->123
+#### 6.参数特性
+* lazy
+默认情况下，v-model在input事件中同步输入框值与数据，加lazy属性后从会改到在change事件中同步。
+```javascript
+<input v-model="query" lazy />
+```
+* nunber
+会自动将用户输入转为Number类型，如果原值转换结果为NaN则返回原值。
+```javascript
+<input v-model="age" number />
+```
+* debounce
+debounce为设置的最小时延，单位为ms,即为单位时间内仅执行一次数据更新。该参数往往应用在高耗操作上，例如在更新时发出ajax请求返回提示信息。
+```javascript
+<input v-model="query" debounce="500"/>
+```
+不过Vue.js2.0中取消了lazy和nubmer作为参数，用修饰符(modifier)来代替:
+```javascript
+<input v-model.lazy="query" /> <input v-model.number="age"/>
+```
+新增了trim修饰符,去掉输入值首尾空格:
+```javascript
+<input v-model.trim="name" />
+```
+去除了debounce这个参数，原因是无法监测到输入新数据，但尚未同步到vm实例属性时这个状态。
+
 
 
 
