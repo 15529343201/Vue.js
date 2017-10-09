@@ -537,6 +537,26 @@ Vue1.0
 #### 5.绑定value
 &emsp;&emsp;表单控件的值同样可以绑定在Vue实例的动态属性上，用v-bind实现。示例:<br/>
 1.Checkbox
+```javascript
+<input type="checkbox" v-model="checked" v-bind:true-value="a" v-bind:false-value="b">
+```
+选中:vm.checked==vm.a //->true
+未选中:vm.checked==vm.b //->true
+2.Radio
+```javascript
+<input type="radio" v-model="checked",v-bind:value="a">
+```
+选中:vm.checked==vm.a //->true
+3.Select Options
+```javascript
+<select v-model="selected">
+    <!--对象字面量-->
+    <option v-bind:value="{number:123}">123</option>
+</select>
+```
+选中:typeof vm.selected// -> 'object'
+vm.selected.number // ->123
+
 
 
 
