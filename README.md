@@ -609,7 +609,24 @@ classB : 'class-b'
 渲染结果为： ``<div class="class-a class-b"></div>。``<br/>
 也可以使用三元表达式切换数组中的 ``class， <div v-bind:class="[classA, isB ? classB :
 '']"></div>``。如果 vm.isB = false, 则渲染结果为`` <div v-bind:class="class-a"></div>``。
-
+#### 2．内联样式绑定
+style 属性绑定的数据即为内联样式，同样具有对象和数组两种形式：
+① 对象语法：直接绑定符合样式格式的对象。
+```javascript
+<div v-bind:style="alertStyle"></div>
+data : {
+alertStyle : {
+color : 'red',
+fontSize : '20px'
+}
+}
+```
+除了直接绑定对象外，也可以绑定单个属性或直接使用字符串。
+``<div v-bind:style="{ fontSize : alertStyle.fontSize, color : 'red'}"></div>``<br/>
+② 数组语法： v-bind:style 允许将多个样式对象绑定到统一元素上。<br/>
+``<div v-bind:style="[ styleObjectA, styleObjectB]" .></div>``
+#### 3．自动添加前缀
+在使用 transform 这类属性时， v-bind:style 会根据需要自动添加厂商前缀。 :style 在运行时进行前缀探测，如果浏览器版本本身就支持不加前缀的 css 属性，那就不会添加。
 
 
 
