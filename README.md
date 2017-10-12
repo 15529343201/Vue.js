@@ -588,6 +588,27 @@ debounce为设置的最小时延，单位为ms,即为单位时间内仅执行一
 #### 1．Class绑定
 首先说明的是 class 属性，我们绑定的数据可以是对象和数组，具体的语法如下：<br/>
 ① 对象语法： v-bind:class 接受参数是一个对象，而且可以与普通的 class 属性共存。<br/>
+```javascript
+<div class="tab" v-bind:calss="{'active' : active , 'unactive' : !active}">
+</div>
+vm 实例中需要包含
+data : {
+active : true
+}
+```
+渲染结果为：``<div class="tab active"></div>``
+② 数组语法： v-bind:class 也接受数组作为参数。
+```javascript
+<div v-bind:class="[classA, classB]"></div>
+vm 实例中需要包含
+data : {
+classA : 'class-a',
+classB : 'class-b'
+}
+```
+渲染结果为： ``<div class="class-a class-b"></div>。``
+也可以使用三元表达式切换数组中的 ``class， <div v-bind:class="[classA, isB ? classB :
+'']"></div>``。如果 vm.isB = false, 则渲染结果为`` <div v-bind:class="class-a"></div>``。
 
 
 
