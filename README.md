@@ -596,7 +596,7 @@ data : {
 active : true
 }
 ```
-渲染结果为：``<div class="tab active"></div>``
+渲染结果为：``<div class="tab active"></div>``<br/>
 ② 数组语法： v-bind:class 也接受数组作为参数。
 ```javascript
 <div v-bind:class="[classA, classB]"></div>
@@ -606,7 +606,7 @@ classA : 'class-a',
 classB : 'class-b'
 }
 ```
-渲染结果为： ``<div class="class-a class-b"></div>。``
+渲染结果为： ``<div class="class-a class-b"></div>。``<br/>
 也可以使用三元表达式切换数组中的 ``class， <div v-bind:class="[classA, isB ? classB :
 '']"></div>``。如果 vm.isB = false, 则渲染结果为`` <div v-bind:class="class-a"></div>``。
 
