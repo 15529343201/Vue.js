@@ -638,17 +638,17 @@ fontSize : '20px'
 &emsp;&emsp;① 对搜索引擎友好。<br/>
 &emsp;&emsp;② 首页加载时间短，后端渲染加载完成后就直接显示HTML，但前端渲染在加载完成后还需要有段 js渲染的时间。Vue.js2.0开始支持服务端渲染，从而让开发者在使用上有了更多的选择。
 ### 2.3.2　条件渲染
-Vue.js 提供 v-if，v-show，v-else，v-for这几个指令来说明模板和数据间的逻辑关系，这基本就构成了模板引擎的主要部分。下面将详细说明这几个指令的用法和场景。
+&emsp;&emsp;Vue.js 提供 v-if，v-show，v-else，v-for这几个指令来说明模板和数据间的逻辑关系，这基本就构成了模板引擎的主要部分。下面将详细说明这几个指令的用法和场景。
 #### 1．v-if/v-else
-v-if 和 v-else 的作用是根据数据值来判断是否输出该 DOM 元素，以及包含的子元素。例如：<br/>
+&emsp;&emsp;v-if 和 v-else 的作用是根据数据值来判断是否输出该 DOM 元素，以及包含的子元素。例如：<br/>
 ``<div v-if="yes">yes</div>``<br/>
-如果当前 vm 实例中包含``data.yes=true``，则模板引擎将会编译这个 DOM 节点，输出``<div>yes</div>``。
+&emsp;&emsp;如果当前 vm 实例中包含``data.yes=true``，则模板引擎将会编译这个 DOM 节点，输出``<div>yes</div>``。
 我们也可以利用 v-else 来配合v-if使用。例如：<br/>
 ```javascript
 <div v-if="yes">yes</div>
 <div v-else>no</div>
 ```
-需要注意的是，v-else必须紧跟v-if，不然该指令不起作用。例如：<br/>
+&emsp;&emsp;需要注意的是，v-else必须紧跟v-if，不然该指令不起作用。例如：<br/>
 ```javascript
 <div v-if="yes">yes</div>
 <p>the v-else div shows</p>
@@ -680,10 +680,10 @@ inner : false
 ``<div v-show="show">show</div>``<br/>
 &emsp;&emsp;也可以搭配 v-else 使用，用法和 v-if 一致。例如：<br/>
 ``<div v-show="show">show</div>``
-``<div v-else>hidden</div>``
+``<div v-else>hidden</div>``<br/>
 &emsp;&emsp;与v-if不同的是，v-show元素的使用会渲染并保持在 DOM 中。 v-show 只是切换元素的 css属性 display。例如：<br/>
 ``<div v-if="show">if</div>``
-``<div v-show="show">show</div>``
+``<div v-show="show">show</div>``<br/>
 &emsp;&emsp;show 分别为 true 时的结果：<br/>
 ```javascript
 <!-- v-if vs v-show -->
