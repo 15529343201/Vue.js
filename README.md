@@ -637,7 +637,69 @@ fontSize : '20px'
 &emsp;&emsp;而后端渲染的优点在于：<br/>
 &emsp;&emsp;① 对搜索引擎友好。<br/>
 &emsp;&emsp;② 首页加载时间短，后端渲染加载完成后就直接显示HTML，但前端渲染在加载完成后还需要有段 js渲染的时间。Vue.js2.0开始支持服务端渲染，从而让开发者在使用上有了更多的选择。
-
+### 2.3.2　条件渲染
+Vue.js 提供 v-if，v-show，v-else，v-for这几个指令来说明模板和数据间的逻辑关系，这基本就构成了模板引擎的主要部分。下面将详细说明这几个指令的用法和场景。
+#### 1．v-if/v-else
+v-if 和 v-else 的作用是根据数据值来判断是否输出该 DOM 元素，以及包含的子元素。例如：<br/>
+``<div v-if="yes">yes</div>``<br/>
+如果当前 vm 实例中包含``data.yes=true``，则模板引擎将会编译这个 DOM 节点，输出``<div>yes</div>``。
+我们也可以利用 v-else 来配合v-if使用。例如：<br/>
+```javascript
+<div v-if="yes">yes</div>
+<div v-else>no</div>
+```
+需要注意的是，v-else必须紧跟v-if，不然该指令不起作用。例如：<br/>
+```javascript
+<div v-if="yes">yes</div>
+<p>the v-else div shows</p>
+<div v-else>no</div>
+```
+&emsp;&emsp;最终这三个元素都会输出显示在浏览器中。<br/>
+&emsp;&emsp;v-if 绑定的元素包含子元素则不影响和 v-else 的使用。例如：<br/>
+```javascript
+<div v-if="yes">
+<div v-if="inner">inner</div>
+<div v-else>not inner</div>
+</div>
+<div v-else>no</div>
+new Vue({
+data : {
+yes : true,
+inner : false
+}
+})
+```
+&emsp;&emsp;输出结果为：<br/>
+```javascript
+<div>
+<div>not inner></div>
+</div>
+```
+#### 2．v-show
+&emsp;&emsp;除了v-if，v-show也是可以根据条件展示元素的一种指令。例如：<br/>
+``<div v-show="show">show</div>``<br/>
+&emsp;&emsp;也可以搭配 v-else 使用，用法和 v-if 一致。例如：<br/>
+``<div v-show="show">show</div>``
+``<div v-else>hidden</div>``
+&emsp;&emsp;与v-if不同的是，v-show元素的使用会渲染并保持在 DOM 中。 v-show 只是切换元素的 css属性 display。例如：<br/>
+``<div v-if="show">if</div>``
+``<div v-show="show">show</div>``
+&emsp;&emsp;show 分别为 true 时的结果：<br/>
+```javascript
+<!-- v-if vs v-show -->
+<div>if</div>
+<div>show</div>
+```
+&emsp;&emsp;show 分别为 false 时的结果：<br/>
+```javascript
+<!-- v-if vs v-show -->
+<div style="display:none;">show</div>
+```
+#### 3．v-if vs v-show
+&emsp;&emsp;从上述 v-show 图能够明显看到，当 v-if 和 v-show 的条件发生变化时，v-if引起了dom操作级别的变化，而 v-show仅发生了样式的变化，从切换的角度考虑， v-show 消耗的性能要比 v-if 小。<br/>
+&emsp;&emsp;除此之外， v-if 切换时， Vue.js 会有一个局部编译 / 卸载的过程，因为 v-if 中的模板
+也可能包括数据绑定或子组件。v-if会确保条件块在切换当中适当地销毁与中间内部的事件监听器和子组件。而且 v-if 是惰性的，如果在初始条件为假时， v-if 本身什么都不会做，而v-show则仍会进行正常的操作，然后把 css 样式设置为 display:none。<br/>
+&emsp;&emsp;所以，总的来说，v-if有更高的切换消耗而 v-show 有更高的初始渲染消耗，我们需要根据实际的使用场景来选择合适的指令。
 
 
 
