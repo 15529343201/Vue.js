@@ -812,6 +812,30 @@ c-c:c-value
 3
 4
 ```
+### 2.3.4　template标签用法
+&emsp;&emsp;上述的例子中，v-show和v-if指令都包含在一个根元素中，那是否有方式可以将指令作用到多个兄弟 DOM 元素上？Vue.js提供了template标签，我们可以将指令作用到这个标签上，但最后的渲染结果里不会有它。例如：<br/>
+```javascript
+<template v-if="yes">
+<p>There is first dom</p>
+<p>There is second dom</p>
+<p>There is third dom</p>
+</template>
+```
+&emsp;&emsp;输出结果为：<br/>
+```javascript
+<!-- template -->
+<p>There is first dom</p>
+<p>There is second dom</p>
+<p>There is third dom</p>
+```
+&emsp;&emsp;同样， template 标签也支持使用 v-for 指令，用来渲染同级的多个兄弟元素。例如：<br/>
+```javascript
+<template v-for="item in items">
+<p>{{item.name}}</p>
+<p>{{item.desc}}<p>
+</template>
+```
+
 
 
 
