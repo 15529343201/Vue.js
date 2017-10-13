@@ -700,7 +700,118 @@ inner : false
 &emsp;&emsp;除此之外， v-if 切换时， Vue.js 会有一个局部编译 / 卸载的过程，因为 v-if 中的模板
 也可能包括数据绑定或子组件。v-if会确保条件块在切换当中适当地销毁与中间内部的事件监听器和子组件。而且 v-if 是惰性的，如果在初始条件为假时， v-if 本身什么都不会做，而v-show则仍会进行正常的操作，然后把 css 样式设置为 display:none。<br/>
 &emsp;&emsp;所以，总的来说，v-if有更高的切换消耗而 v-show 有更高的初始渲染消耗，我们需要根据实际的使用场景来选择合适的指令。
-
+### 2.3.3　列表渲染
+&emsp;&emsp;v-for指令主要用于列表渲染，将根据接收到数组重复渲染v-for绑定到的DOM元素及内部的子元素，并且可以通过设置别名的方式，获取数组内数据渲染到节点中。例如：<br/>
+```javascript
+<ul>
+<li v-for="item in items">
+<h3>{{item.title}}</h3>
+<p>{{item.description}}</p>
+</li>
+</ul>
+var vm = new Vue({
+el : '#app',
+data: {
+items : [
+{ title : 'title-1', description : 'description-1'},
+{ title : 'title-2', description : 'description-2'},
+{ title : 'title-3', description : 'description-3'},
+{ title : 'title-4', description : 'description-4'}
+]
+}
+});
+```
+&emsp;&emsp;其中items为data中的属性名，item为别名，可以通过 item来获取当前数组遍历的每个元素，输出结果为：<br/>
+```javascript
+<ul>
+<li>
+<h3>title-1</h3>
+<p>description-1</p>
+</li><li>
+<h3>title-2</h3>
+<p>description-2</p>
+</li><li>
+<h3>title-3</h3>
+<p>description-3</p>
+</li><li>
+<h3>title-4</h3>
+<p>description-4</p>
+</li>
+</ul>
+```
+&emsp;&emsp;v-for 内置了 $index 变量，可以在 v-for 指令内调用，输出当前数组元素的索引。另
+外，我们也可以自己指定索引的别名，如
+```javascript
+<li v-for="(index,item) in items">{{index}} –
+{{$index}} – {{item.title}}</li>
+```
+，输出结果为：<br/>
+```javascript
+<ul>
+<li>
+0 - 0 - title-1
+</li><li>
+1 - 1 - title-2
+</li><li>
+2 - 2 - title-3
+</li><li>
+3 - 3 - title-4
+</li>
+</ul>
+```
+&emsp;&emsp;需要注意的是Vue.js对data中数组的原生方法进行了封装，所以在改变数组时能触发视图更新，但以下两种情况是无法触发视图更新的：<br/>
+&emsp;&emsp;① 通过索引直接修改数组元素， 例如 ``vm.items[0] = { title : 'title-changed'}``;<br/>
+&emsp;&emsp;② 无法直接修改“修改数组”的长度， 例如： ``vm.items.length = 0``<br/>
+&emsp;&emsp;对于第一种情况， Vue.js 提供了 \$set 方法，在修改数据的同时进行视图更新，可以写成：<br/>
+&emsp;&emsp;``vm.items.$set(0, { title : 'title-changed'}`` 或 者 ``vm.$set('items[0]', { title : 'titlealso-changed'})``，这两种方式皆可以达到效果。<br/>
+&emsp;&emsp;在列表渲染的时候，有个性能方面的小技巧，如果数组中有唯一标识 id，例如：<br/>
+```javascript
+items : [
+{ _id : 1, title : 'title-1'},
+{ _id : 2, title : 'title-2'},
+{ _id : 3, title : 'title-3'}
+…
+]
+```
+&emsp;&emsp;通过trace-by给数组设定唯一标识，我们将上述 v-for 作用于的 li 元素修改为：<br/>
+&emsp;&emsp;``<li v-for="item in items" track-by="_id"></li>``<br/>
+&emsp;&emsp;这样，Vue.js在渲染过程中会尽量复用原有对象的作用域及 DOM 元素。<br/>
+&emsp;&emsp;v-for除了可以遍历数组外，也可以遍历对象，与 \$index 类似，作用域内可以访问另一内置变量 \$key，也可以使用（key,value）形式自定义key变量。
+```javascript
+<li v-for="(key, value) in objectDemo">
+{{key}} - {{$key}} : {{value}}
+</li>
+var vm = new Vue({
+el : '#app',
+data: {
+objectDemo : {
+a : 'a-value',
+b : 'b-value',
+c : 'c-value',
+}
+}
+});
+```
+&emsp;&emsp;输出结果：<br/>
+```javascript
+a-a:a-value
+b-b:b-value
+c-c:c-value
+```
+&emsp;&emsp;最后，v-for还可以接受单个整数，用作循环次数：<br/>
+```javascript
+<li v-for="n in 5">
+{{ n }}
+</li>
+```
+&emsp;&emsp;输出结果：<br/>
+```javascript
+0
+1
+2
+3
+4
+```
 
 
 
