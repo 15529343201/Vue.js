@@ -835,7 +835,100 @@ c-c:c-value
 <p>{{item.desc}}<p>
 </template>
 ```
-
+## 2.4　事件绑定与监听
+&emsp;&emsp;当模板渲染完成之后，就可以进行事件的绑定与监听了。 Vue.js提供了v-on指令用来监听DOM事件，通常在模板内直接使用，而不像传统方式在 js 中获取DOM 元素，然后绑定事件。例如：<br/>
+``<button v-on:click="say">Say</button>``<br/>
+### 2.4.1 方法及内联语句处理器
+&emsp;&emsp;通过 v-on 可以绑定实例选项属性 methods 中的方法作为事件的处理器，v-on:后参数接受所有的原生事件名称。例如：<br/>
+```javascript
+<button v-on:click="say">Say</button>
+var vm = new Vue({
+el : '#app',
+data: {
+msg : 'Hello Vue.js'
+},
+methods : {
+say : function() {
+alert(this.msg);
+}
+}
+});
+```
+&emsp;&emsp;单击 button，即可触发 say 函数，弹出 alert 框 'Hello Vue.js'。<br/>
+&emsp;&emsp;Vue.js 也 提 供 了 v-on 的 缩 写 形 式， 我 们 可 以 将 模 板 中 的 内 容 改 写 为 ``<button @click='say'>Say</button>``，这两句语句是等价的。<br/>
+&emsp;&emsp;除了直接绑定 methods 函数外， v-on 也支持内联 JavaScript语句，但仅限一个语句。例如：<br/>
+```javascript
+<button v-on:click="sayFrom ('from param')">Say</button>
+var vm = new Vue({
+el : '#app',
+data: {
+msg : 'Hello Vue.js'
+},
+methods : {
+sayFrom: function(from) {
+alert(this.msg + '' + from);
+}
+}
+});
+```
+&emsp;&emsp;在直接绑定methods函数和内联JavaScript 语句时，都有可能需要获取原生DOM事件对象，以下两种方式都可以获取：<br/>
+```javascript
+<button v-on:click="showEvent">Event</button>
+<button v-on:click="showEvent($event)">showEvent</button>
+<button v-on:click="showEvent()">showEvent</button> // 这样写获取不到 event
+var vm = new Vue({
+el : '#app',
+methods : {
+showEvent : function(event) {
+console.log(event);
+}
+}
+});
+```
+&emsp;&emsp;同一元素上也可以通过v-on绑定多个相同事件函数，执行顺序为顺序执行，例如：<br/>
+``<div v-on:click="sayFrom('first')" v-on:click ="sayFrom('second)">``
+### 2.4.2　修饰符
+&emsp;&emsp;Vue.js为指令v-on提供了多个修饰符，方便我们处理一些DOM事件的细节，并且修饰符可以串联使用。主要的修饰符如下。<br/>
+&emsp;&emsp;.stop:等同于调用event.stopPropagation()。<br/>
+&emsp;&emsp;.prevent:等同于调用event.preventDefault()。<br/>
+&emsp;&emsp;.capture:使用capture模式添加事件监听器。<br/>
+&emsp;&emsp;.self:只当事件是从监听元素本身触发时才触发回调。<br/>
+&emsp;&emsp;使用方式如下：
+```javascript
+<a v-on:click.stop='doThis'></a>
+<form v-on:submit.prevent="onSubmit"></form> // 阻止表单默认提交事件
+<form v-on:submit.stop.prevent="onSubmit"></form> // 阻止默认提交事件且阻止冒泡
+<form v-on:submit.stop.prevent></form> // 也可以只有修饰符，并不绑定事件
+```
+&emsp;&emsp;可以尝试运行以下这个例子，更好地理解修饰符在其中起到的作用。
+```javascript
+var vm = new Vue({
+el : '#app',
+methods : {
+saySelf(msg) {
+alert(msg);
+}
+}
+});
+<div v-on:click="saySelf('click from inner')" v-on:click.self="saySelf('click
+from self')">
+<button v-on:click="saySelf('button click')">button</button>
+<button v-on:click.stop="saySelf('just button click')">button</button>
+</div>
+```
+&emsp;&emsp;除了事件修饰符之外，v-on还提供了按键修饰符，方便我们监听键盘事件中的按键。例如：<br/>
+```javascript
+<input v-on:keyup.13="submit"/> // 监听 input 的输入，当输入回车时触发 Submit 函
+数（回车的 keycode 值为 13），用于处理常见的用户输入完直接按回车键提交）
+```
+&emsp;&emsp;Vue.js 给一些常用的按键名提供了别称，这样就省去了一些记 keyCode 的事件。全部按键别名为： enter、 tab、 delete、 esc、space、up、down、left、right。例如：<br/>
+``<input v-on:keyup.enter="submit" />``<br/>
+&emsp;&emsp;Vue.js也允许我们自己定义按键别名，例如：<br/>
+```javascript
+Vue.directive('on').keyCodes.f1 = 112; // 即可以使用 <input v-on:keyup.f1="help" />
+```
+&emsp;&emsp;Vue.js2.0中可以直接在``Vue.config.keyCodes``里添加自定义按键别名，无需修改v-on指令，例如：<br/>
+``Vue.config.keyCodes.f1 = 12。``
 
 
 
