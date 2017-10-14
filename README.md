@@ -929,7 +929,28 @@ Vue.directive('on').keyCodes.f1 = 112; // 即可以使用 <input v-on:keyup.f1="
 ```
 &emsp;&emsp;Vue.js2.0中可以直接在``Vue.config.keyCodes``里添加自定义按键别名，无需修改v-on指令，例如：<br/>
 ``Vue.config.keyCodes.f1 = 12。``
-
+### 2.4.3　与传统事件绑定的区别
+&emsp;&emsp;如果你之前没有接触过Angularjs，ReactJS 这类框架，或许会对Vue.js这种事件监听方式感到困惑。毕竟我们一开始接受的理念就是将HTML和JS隔离开编写。但其实 Vue.js事件处理方法和表达式都严格绑定在当前视图的 ViewModel上，所以并不会导致维护困难。<br/>
+&emsp;&emsp;而这么写的好处在于：<br/>
+&emsp;&emsp;①无需手动管理事件。ViewModal被销毁时，所有的事件处理器都会自动被删除，让我们从获取DOM 绑定事件然后在特定情况下再解绑这样的事情中解脱出来。<br/>
+&emsp;&emsp;②解耦。ViewModel代码是纯粹的逻辑代码，和 DOM 无关，有利于我们写自动化测试用例<br/>
+&emsp;&emsp;还有个与以往不同的细节是，我们在处理 ul、 li 这种列表，尤其是下拉刷新这种需要异步加载数据的列表时，往往会把li事件代理到ul上，这样异步加载进来的新数据就不需要再次绑定事件。而 Vue.js 这类的框架由于不需要手动添加事件，往往直接会把事件绑定在 li 上，类似这样 :``<li v-repeat="item in items" v-on:click="clickLi"></li>``，理论上每次新增 li 的时候都会进行同li个数的事件绑定，比用事件代理多耗了些性能。但在实际运用中并没有什么特别的性能瓶颈影响，而且我们也省去在代理中处理 e.target 的步骤，让事件和 DOM 元素关系更紧密、简单。
+## 2.5　Vue.extend()
+&emsp;&emsp;组件化开发也是Vue.js中非常重要的一个特性，我们可以将一个页面看成一个大的根组件，里面包含的元素就是不同的子组件，子组件也可以在不同的根组件里被调用。在上述例子中，可以看到在一个页面中通常会声明一个Vue的实例newVue({})作为根组件，那么如何生成可被重复使用的子组件呢？ Vue.js 提供了 Vue.extend(options)方法，创建基础Vue构造器的“子类”，参数 options对象和直接声明Vue实例参数对象基本一致，使用方法如下：<br/>
+```javascript
+var Child = Vue.extend({
+template : '#child',
+// 不同的是， el 和 data 选项需要通过函数返回值赋值，避免多个组件实例共用一个数据
+data : function() {
+return {
+….
+}
+}
+….
+})
+Vue.component('child', Child) // 全局注册子组件
+<child ….></child> // 子组件在其他组件内的调用方式
+```
 
 
 
