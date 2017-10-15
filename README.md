@@ -951,6 +951,55 @@ return {
 Vue.component('child', Child) // 全局注册子组件
 <child ….></child> // 子组件在其他组件内的调用方式
 ```
+# 第三章 指令
+&emsp;&emsp;指令是 Vue.js中一个重要的特性，主要提供了一种机制将数据的变化映射为DOM行为。那什么叫数据的变化映射为DOM行为？前文中阐述过Vue.js是通过数据驱动的，所以我们不会直接去修改DOM结构，不会出现类似于``$('ul').append('<li>one</li>')`` 这样的操作。当数据变化时，指令会依据设定好的操作对DOM进行修改，这样就可以只关注数据的变化，而不用去管理DOM的变化和状态，使得逻辑更加清晰，可维护性更好。<br/>
+&emsp;&emsp;Vue.js 本身就提供了大量的内置指令来进行对DOM的操作，我们也可以开发自定义指令。本章主要介绍部分常见指令的使用及场景以及自定义指令的开发和指令相关的参数。
+## 3.1 内置指令
+### 3.1.1 v-bind
+&emsp;&emsp;v-bind 主要用于动态绑定DOM元素属性（attribute），即元素属性实际的值是由 vm实例中的 data 属性提供的。例如：
+```javascript
+<img v-bind:src='avatar' />
+new Vue({
+data : {
+avatar : 'http://….'
+}
+})
+```
+&emsp;&emsp;v-bind 可以简写为：，上述例子即可简写为 ``<img :src='avatar' />。``<br/>
+&emsp;&emsp;v-bind 还拥有三种修饰符，分别为.sync、.once、.camel，作用分别如下。<br/>
+&emsp;&emsp;.sync ：用于组件props属性，进行双向绑定，即父组件绑定传递给子组件的值，无论在哪个组件中对其进行了修改，其他组件中的这个值也会随之更新。例如： ``<my-child:parent.sync='parent'></my-child>``。父组件实例vm.parent将通过prop选项传递给子组件 mychild，即my-child组件构造函数需要定义选项 props:['parent']，便可通过子组件自身实例vm.parent获取父组件传递的数据。两个组件都共享这一份数据，不论谁修改了这份数据，组件获取的数据都是一致的。但一般不推荐子组件直接修改父组件数据，这样会导致耦合且组件
+内的数据不容易维护。<br/>
+&emsp;&emsp;.once ：同.synce一样，用于组件props属性，但进行的是单次绑定。和双向绑定正好相反，单次绑定是将绑定数据传递给子组件后，子组件单独维护这份数据，和父组件的数据再无关系，父组件的数据发生变化也不会影响子组件中的数据。例如：``<my-child :parent.once='parent'></my-child>``<br/>
+&emsp;&emsp;.camel ：将绑定的特性名字转回驼峰命名。只能用于普通HTML属性的绑定，通常会用于svg 标签下的属性，例如：`` <svg width='400' height='300' :view-box.camel='viewBox'></svg>``，输出结果即为``<svgwidth="400"height="300" viewBox="….."></svg>``<br/>
+&emsp;&emsp;不过在 Vue.js2.0中，修饰符.syce和.once均被废弃，规定组件间仅能单向传递，如果子组件需要修改父组件，则必须使用事件机制来进行处理。
+### 3.1.2 v-model
+&emsp;&emsp;v-model指令在第2.2.3小节中的表单控件中已经说明过了，这里就不再赘述了。该指令主要用于 input、 select、 textarea 标签中，具有 lazy、 number、 debounce（2.0 废除）、trim（2.0 新增）这些修饰符。
+### 3.1.3　v-if/v-else/v-show
+&emsp;&emsp;v-if/v-else/v-show这三个指令主要用于根据条件展示对应的模板内容，这在第2.3.2 小节的渲染语法中也进行了说明。v-if和v-show的主要区别就在于， v-if 在条件为 false的情况下并不进行模板的编译，而v-show则会在模板编译好之后将元素隐藏掉。 v-if 的切换消耗要比 v-show 高，但初始条件为 false 的情况下， v-if 的初始渲染要稍快。
+### 3.1.4　v-for
+&emsp;&emsp;v-for 也是用于模板渲染的指令，在第2.3.3小节列表渲染中我们也已说明过，这里就不再赘述。常见用法如下：
+```javascript
+<ul>
+<li v-for='(index, item) in items'>
+<p>{{ item.name }}</p>
+…..
+</li>
+</ul>
+```
+&emsp;&emsp;v-for 指令用法在Vue.js2.0中做了些细微的调整，大致包含以下几个方面：
+#### 1．参数顺序变化
+&emsp;&emsp;当包含参数index或key时，对象参数修改为（item,index）或（value, key），这样与 JS Array对象的新方法forEach和map，以及一些对象迭代器（例如 lodash）的参数能保持一致。
+#### 2．v-bind:key
+&emsp;&emsp;属性`` track-by ``被 ``v-bind ： key ``代替，`` <div v-for="item in items" tranck-by="id">`` 需要改写成`` <div v-for="item in items" v-bind:key="item.id">``。
+#### 3.n in 10
+&emsp;&emsp;``v-for="n in 10" ``中的 n 由原来的 0 ～ 9 迭代变成 1 ～ 10 迭代。
+### 3.1.5 v-on
+&emsp;&emsp;v-on 指令主要用于事件绑定，在第2.4节中我们已经说明。回顾一下用法：<br/>
+&emsp;&emsp;``<button v-on:click='onClick'></button>``<br/>
+&emsp;&emsp;v-on 可以简写为：<br/>
+&emsp;&emsp;``<button @click='onClick'></button>``
+&emsp;&emsp;修饰符包括 .stop、 .prevent、 .capture、 .self 以及指定按键 ``.{keyCode|keyAlias}``。
+&emsp;&emsp;在 Vue.js 2.0中，在组件上使用v-on指令只监听自定义事件，即使用 $emit 触发的事件；如果要监听原生事件，需要使用修饰符.native，例如``<my-component v-on:click.native="onClick"></my-component>``。
 
 
 
