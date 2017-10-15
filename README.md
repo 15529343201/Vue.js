@@ -1021,6 +1021,22 @@ avatar : 'http://….'
 vm.$els.camelcase.innerText // -> There is a camelcase
 vm.$els.camelCase.innerText // -> There is a camelCase
 ```
+### 3.1.9 v-ref
+&emsp;&emsp;v-ref 指令与v-el类似，只不过v-ref作用于子组件上，实例可以通过 \$refs 访问子组件。命名方式也类似，想使用驼峰式命名的话用“-”来做连接。例如：<br/>
+```javascript
+<message v-ref:title content="title"></message>
+<message v-ref:sub-title content="subTitle"></message>
+var Message = Vue.extend({
+props : ['content'],
+template : '<h1>{{content}}</h1>'
+});
+Vue.component('message', Message);
+```
+&emsp;&emsp;我们最终将 ``vm.$refs.title`` 和 ``vm.$refs.subTitle ``用 console.log 的方式打印到控制台中，结果为：
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.15.PNG)<br/>
+&emsp;&emsp;输出了两个子组件的实例。<br/>
+&emsp;&emsp;从理论上来说，我们可以通过父组件对子组件进行任意的操作，但实际上尽量还是会采用props数据绑定，用组件间通信的方式去进行逻辑上的交互，尽量让组件只操作自己内部的数据和状态，如果组件间有通信，也通过调用组件暴露出来的接口进行通信，而不是直接跨组件修改数据。
+
 
 
 
