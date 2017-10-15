@@ -1036,7 +1036,26 @@ Vue.component('message', Message);
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.15.PNG)<br/>
 &emsp;&emsp;输出了两个子组件的实例。<br/>
 &emsp;&emsp;从理论上来说，我们可以通过父组件对子组件进行任意的操作，但实际上尽量还是会采用props数据绑定，用组件间通信的方式去进行逻辑上的交互，尽量让组件只操作自己内部的数据和状态，如果组件间有通信，也通过调用组件暴露出来的接口进行通信，而不是直接跨组件修改数据。
-
+### 3.1.10　v-pre
+&emsp;&emsp;v-pre 指令相对简单，就是跳过编译这个元素和子元素，显示原始的 {{}}Mustache 标签，用来减少编译时间。例如：
+```javascript
+<div v-pre>{{ uncompiled}}</div>
+var vm = new Vue({
+el : '#app',
+data: {
+uncompiled : 'Thers is an uncompiled element'
+}
+});
+```
+&emsp;&emsp;最后输入:
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.16.PNG)<br/>
+### 3.1.11　v-cloak
+&emsp;&emsp;v-cloak指令相当于在元素上添加了一个[v-cloak]的属性，直到关联的实例结束编译。官方推荐可以和css规则[v-cloak]{display:none}一起使用，可以隐藏未编译的 Mustache标签直到实例准备完毕。例如：<br/>
+&emsp;&emsp;``<div v-cloak>{{ msg }}</div>``
+### 3.1.12　v-once
+&emsp;&emsp;v-once 指令是Vue.js2.0中新增的内置指令，用于标明元素或组件只渲染一次，即使随后发生绑定数据的变化或更新，该元素或组件及包含的子元素不会再次被编译和渲染。这样就相当于我们明确标注了这些元素不需要被更新，所以 v-once 的作用是最大程度地提升了更新行为中页面的性能，可以略过一些明确不需要变化的步骤。使用方式如下：<br/>
+``<span v-once>{{msg}}</span>``
+``<my-component v-once :msg='msg'></my-component>``
 
 
 
