@@ -1011,9 +1011,9 @@ avatar : 'http://….'
 ``<div v-HTML="HTML"></div>``
 ### 3.1.8 v-el
 &emsp;&emsp;v-el 指令为 DOM 元素注册了一个索引，使得我们可以直接访问 DOM 元素。语法上说，可以通过所属实例的\$els属性调用。例如：<br/>
-&emsp;&emsp;``<div v-el:demo>there is a el demo</div>``
-&emsp;&emsp;``vm.$els.demo.innerText // -> there is a el demo``
-&emsp;&emsp;或者在 vm 内部通过 this 进行调用。
+&emsp;&emsp;``<div v-el:demo>there is a el demo</div>``<br/>
+&emsp;&emsp;``vm.$els.demo.innerText // -> there is a el demo``<br/>
+&emsp;&emsp;或者在 vm 内部通过 this 进行调用。<br/>
 &emsp;&emsp;另外，由于HMTL不区分大小写，在v-el中如果使用了驼峰式命名，系统会自动转成小写。但可以使用“-” 来连接你期望大写的字母。例如：<br/>
 ```javascript
 <div v-el:camelCase>There is a camelcase</div>
