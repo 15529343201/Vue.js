@@ -997,9 +997,14 @@ avatar : 'http://….'
 &emsp;&emsp;v-on 指令主要用于事件绑定，在第2.4节中我们已经说明。回顾一下用法：<br/>
 &emsp;&emsp;``<button v-on:click='onClick'></button>``<br/>
 &emsp;&emsp;v-on 可以简写为：<br/>
-&emsp;&emsp;``<button @click='onClick'></button>``
-&emsp;&emsp;修饰符包括 .stop、 .prevent、 .capture、 .self 以及指定按键 ``.{keyCode|keyAlias}``。
+&emsp;&emsp;``<button @click='onClick'></button>``<br/>
+&emsp;&emsp;修饰符包括 .stop、 .prevent、 .capture、 .self 以及指定按键 ``.{keyCode|keyAlias}``。<br/>
 &emsp;&emsp;在 Vue.js 2.0中，在组件上使用v-on指令只监听自定义事件，即使用 $emit 触发的事件；如果要监听原生事件，需要使用修饰符.native，例如``<my-component v-on:click.native="onClick"></my-component>``。
+### 3.1.6　v-text
+&emsp;&emsp;v-text，参数类型为 String，作用是更新元素的 textContent。 {{}} 文本插值本身也会被编译成 textNode 的一个 v-text 指令。而与直接使用 {{}} 不同的是， v-text 需要绑定在某个元素上，能避免未编译前的闪现问题。例如：
+&emsp;&emsp;``<span v-text="msg"></span>``
+&emsp;&emsp;如果直接使用 <span>{{msg}}</span>，在生命周期 beforeCompile 期间，此刻 msg 数据尚未编译至{{msg}}中，用户能看到一瞬间的{{msg}}，然后闪现为 There is a message，而用 v-text 的话则不会有这个问题，如图 3-1 所示。
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.14.PNG)<br/>
 
 
 
