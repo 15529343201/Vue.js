@@ -1005,7 +1005,22 @@ avatar : 'http://….'
 &emsp;&emsp;``<span v-text="msg"></span>``
 &emsp;&emsp;如果直接使用 <span>{{msg}}</span>，在生命周期 beforeCompile 期间，此刻 msg 数据尚未编译至{{msg}}中，用户能看到一瞬间的{{msg}}，然后闪现为 There is a message，而用 v-text 的话则不会有这个问题，如图 3-1 所示。<br/>
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.14.PNG)<br/>
-
+### 3.1.7　v-HTML
+&emsp;&emsp;v-HTML,参数类型为String，作用为更新元素的innerHTML，接受的字符串不会进行编译等操作，按普通HTML处理。同v-text类似，{{{}}}插值也会编译为节点的 v-HTML指令， v-HTML也需要绑定在某个元素上且能避免编译前闪现问题。例如：<br/>
+``<div>{{{HTML}}}</div>``
+``<div v-HTML="HTML"></div>``
+### 3.1.8 v-el
+&emsp;&emsp;v-el 指令为 DOM 元素注册了一个索引，使得我们可以直接访问 DOM 元素。语法上说，可以通过所属实例的\$els属性调用。例如：<br/>
+&emsp;&emsp;``<div v-el:demo>there is a el demo</div>``
+&emsp;&emsp;``vm.$els.demo.innerText // -> there is a el demo``
+&emsp;&emsp;或者在 vm 内部通过 this 进行调用。
+&emsp;&emsp;另外，由于HMTL不区分大小写，在v-el中如果使用了驼峰式命名，系统会自动转成小写。但可以使用“-” 来连接你期望大写的字母。例如：<br/>
+```javascript
+<div v-el:camelCase>There is a camelcase</div>
+<div v-el:camel-case>There is a camelCase</div>
+vm.$els.camelcase.innerText // -> There is a camelcase
+vm.$els.camelCase.innerText // -> There is a camelCase
+```
 
 
 
