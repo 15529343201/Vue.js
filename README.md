@@ -1102,6 +1102,28 @@ isExist : true
 ```
 &emsp;&emsp;我们在控制台里先后输入 ``vm.param ='second' ``和 ``vm.isExist = false``，整体输出如下：
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.17.PNG)<br/>
+&emsp;&emsp;另外，如果我们只需要使用update函数时，可以直接传入一个函数代替定义对象：
+```javascript
+Vue.directive('my-directive', function(value) {
+// 该函数即为 update 函数
+});
+```
+&emsp;&emsp;上述例子中，可以使用 my-directive 指令绑定的值是 data 中的 param 属性。也可以直接绑定字符串常量，或使用字面修饰符，但这样的话需要注意 update 方法将只调用一次，因为普通字符串不能响应数据变化。例如：
+```javascript
+<div v-my-directive="constant string"/></div> // -> value 为 undefined，因
+为 data 中没有对应的属性
+<div v-my-direcitve="'constant string'"></div> // -> value 为 constant
+string，绑定字符串需要加单引号
+<div v-my-directive.literal="constant string"></div> // -> value 为 constant
+string，利用字面修饰符后无需使用单引号
+```
+&emsp;&emsp;除了字符串外，指令也能接受对象字面量或任意合法的JavaScript 表达式。例如：
+```javascript
+<div v-my-directive="{ title : 'Vue.js', author : 'You'}" ></div>
+<div v-my-directive="isExist ? 'yes' : 'no'" ></div>
+```
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.18.PNG)<br/><br/>
+&emsp;&emsp;注意此时对象字面量不需要用单引号括起来，这和字符串常量不一样。
 
 
 
