@@ -1101,7 +1101,7 @@ isExist : true
 });
 ```
 &emsp;&emsp;我们在控制台里先后输入 ``vm.param ='second' ``和 ``vm.isExist = false``，整体输出如下：
-
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.17.PNG)<br/>
 
 
 
