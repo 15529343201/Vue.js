@@ -1124,6 +1124,65 @@ string，利用字面修饰符后无需使用单引号
 ```
 ![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.18.PNG)<br/><br/>
 &emsp;&emsp;注意此时对象字面量不需要用单引号括起来，这和字符串常量不一样。
+### 3.2.3　指令实例属性
+&emsp;&emsp;除了了解指令的生命周期外，还需要知道指令中能调用的相关属性，以便我们对相关DOM进行操作。在指令的钩子函数内，可以通过this来调用指令实例。下面就详细说明指令的实例属性。<br/>
+&emsp;&emsp;el ：指令绑定的元素。<br/>
+&emsp;&emsp;vm ：该指令的上下文ViewModel，可以为newVue()的实例，也可以为组件实例。<br/>
+&emsp;&emsp;expression ：指令的表达式，不包括参数和过滤器。<br/>
+&emsp;&emsp;arg ：指令的参数。<br/>
+&emsp;&emsp;name ：指令的名字，不包括 v- 前缀。<br/>
+&emsp;&emsp;modifiers ：一个对象，包含指令的修饰符。<br/>
+&emsp;&emsp;descriptor ：一个对象，包含指令的解析结果。<br/>
+&emsp;&emsp;我们可以通过以下这个例子，更直观地了解到这些属性：<br/>
+```javascript
+<div v-my-msg:console.log="content"></div>
+Vue.directive('my-msg', {
+bind : function() {
+console.log('~~~~~~~~~~~bind~~~~~~~~~~~~~');
+console.log('el', this.el);
+console.log('name', this.name);
+console.log('vm', this.vm);
+console.log('expression', this.expression);
+console.log('arg', this.arg);
+console.log('modifiers', this.modifiers);
+console.log('descriptor', this.descriptor);
+},
+update : function(newValue, oldValue) {
+var keys = Object.keys(this.modifiers);
+window[this.arg][keys[0]](newValue);
+},
+unbind : function() {
+}
+});
+var vm = new Vue({
+el : '#app',
+data : {
+content : 'there is the content'
+}
+});
+```
+&emsp;&emsp;输出结果如下：<br/>
+![image](https://github.com/15529343201/Vue.js/blob/master/%E5%9B%BE%E7%89%87/2.19.PNG)<br/><br/>
+### 3.2.4　元素指令
+&emsp;&emsp;元素指令是Vue.js的一种特殊指令，普通指令需要绑定在某个具体的DOM元素上，但元素指令可以单独存在，从使用方式上看更像是一个组件，但本身内部的实例属性和钩子函数是和指令一致的。例如：
+```javascript
+<div v-my-directive></div> // -> 普通指令使用方式
+<my-directive></my-directive> // -> 元素指令使用方式
+```
+&emsp;&emsp;元素指令的注册方式和普通指令类似，也有全局注册和局部注册两种。
+```javascript
+Vue.elementDirective('my-ele-directive') // 全局注册方式
+var Comp = Vue.extend({ // 局部注册，仅限该组件内使用
+… // 省略了其他参数
+elementDirectives : {
+'eleDirective' : {}
+}
+});
+Vue.component('comp', Comp);
+```
+&emsp;&emsp;元素指令不能接受参数或表达式，但可以读取元素特性从而决定行为。而且当编译过程中遇到一个元素指令时，Vue.js将忽略该元素及其子元素，只有元素指令本身才可以操作该元素及其子元素。<br/>
+&emsp;&emsp;Vue.js2.0中取消了这个特性，推荐使用组件来实现需要的业务。
+
 
 
 
