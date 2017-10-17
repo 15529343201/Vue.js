@@ -1056,6 +1056,51 @@ uncompiled : 'Thers is an uncompiled element'
 &emsp;&emsp;v-once 指令是Vue.js2.0中新增的内置指令，用于标明元素或组件只渲染一次，即使随后发生绑定数据的变化或更新，该元素或组件及包含的子元素不会再次被编译和渲染。这样就相当于我们明确标注了这些元素不需要被更新，所以 v-once 的作用是最大程度地提升了更新行为中页面的性能，可以略过一些明确不需要变化的步骤。使用方式如下：<br/>
 ``<span v-once>{{msg}}</span>``
 ``<my-component v-once :msg='msg'></my-component>``
+## 3.2 自定义指令基础
+&emsp;&emsp;除了内置指令外，Vue.js也提供了方法让我们可以注册自定义指令，以便封装对 DOM元素的重的处理行为，提高代码复用率。本小节主要说明了如何创建、注册自定义指令，以及讲述指令的相关属性钩子函数，更深一步地了解指令在 Vue.js 中起到的作用。
+### 3.2.1　指令的注册
+&emsp;&emsp;我们可以通过``Vue.directive(id,definition)``方法注册一个全局自定义指令，接收参数id和定义对象。id是指令的唯一标识，定义对象则是指令的相关属性及钩子函数。例如：<br/>
+&emsp;&emsp;``Vue.directive(‘global-directive’,definition)``;//我们暂时只注册了这个指令，并没有赋予这个指令任何功能。
+&emsp;&emsp;我们可以在模板中这么使用：<br/>
+&emsp;&emsp;``<div v-global-directive></div>``<br/>
+&emsp;&emsp;而除了全局注册指令外，我们也可以通过在组件的directives选项注册一个局部的自定义指令。例如：<br/>
+```javascript
+var comp = Vue.extend({
+directives : {
+'localDirective' : {} // 可以采用驼峰式命名
+}
+});
+```
+&emsp;&emsp;该指令就只能在当前组件内通过``v-local-directive``的方式调用，而无法被其他组件调用。
+### 3.2.2　指令的定义对象
+&emsp;&emsp;我们在注册指令的同时，可以传入definition定义对象，对指令赋予一些特殊的功能。这个定义对象主要包含三个钩子函数： bind、 update 和 unbind。<br/>
+&emsp;&emsp;bind: 只被调用一次，在指令第一次绑定到元素上时调用。<br/>
+&emsp;&emsp;update：指令在bind之后以初始值为参数进行第一次调用，之后每次当绑定值发生变化时调用， update 接收到的参数为 newValue和oldValue
+<br/>
+&emsp;&emsp;unbind：指令从元素上解绑时调用，只调用一次。<br/>
+&emsp;&emsp;这三个函数都是可选函数，但注册一个空指令肯定没有意义，来看下面这个例子，会使我们对整个指令周期有更明确的认识。
+```javascript
+<div v-if="isExist" v-my-directive="param"></div>
+Vue.directive('my-directive', {
+bind : function() {
+console.log('bind', arguments);
+},
+update : function(newValue, oldValue) {
+console.log('update', newValue, oldValue)
+},
+unbind : function() {
+console.log('unbind', arguments);
+}
+})
+var vm = new Vue({
+el : '#app',
+data : {
+param : 'first',
+isExist : true
+}
+});
+```
+&emsp;&emsp;我们在控制台里先后输入 ``vm.param ='second' ``和 ``vm.isExist = false``，整体输出如下：
 
 
 
